@@ -382,9 +382,9 @@ int main (int argc, char* argv[]) {
 
 	vector<Vector3f> p;
 
-	p.push_back(Vector3f(1.2, 3.0, 1.5));
-	p.push_back(Vector3f(-1.2, 3.0, 2.25));
-	p.push_back(Vector3f(1.2, -3.0, 1.0));
+	p.push_back(Vector3f(12, 30, 1.5));
+	p.push_back(Vector3f(-12, -30, 2.25));
+	p.push_back(Vector3f(12, -30, 1.0));
 	planes.push_back(p);
 
 
