@@ -1,5 +1,6 @@
 debug/
 meshes/
-modeler/
+meshes/tmp/
+modeler
 obj/
 src/.DS_Store
