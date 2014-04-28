@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <ctime>
 #include <string.h>
+#include <locale>  
 
 #include <map>
 #include <vector>
@@ -116,14 +117,70 @@ namespace
 
 	}
 
-	void parseOFF(string fname, string dest){
+	void parseOFF(string source, string dest){
+        string l;
+        ofstream o(dest);
+        ifstream f(source);
+        vector<int> face;
+        Vector3f vertex;
+        vector<Vector3f> fv;
+        int f_count;
+        int fc;
+
+        if(f.is_open()){
+            string tmp;
+            bool header = true;
+            int vnum = 0;
+            int fnum = 0;
+
+            while(getline(f, l)){
+                stringstream ss(l);
+                if (header){
+                    ss >> tmp;
+                    if(std::isdigit(tmp[0])){
+                        header = false;
+                        vnum = stoi(tmp);
+                        ss >> fnum;
+                    }
+                }
+                else{
+                    if(vnum>0){
+                        ss >> vertex[0] >> vertex[1] >> vertex[2];
+                        vertices.push_back(vertex);
+                        vnum--;
+                    }
+                    else if(fnum>0){
+                        face.clear();
+                        fv.clear();
+                        ss >> f_count;
+                        for(unsigned int j = 0; j < 3; j++){
+                            ss >> fc;
+                            face.push_back(fc);
+                            fv.push_back(vertices[fc]);
+                        }
+                        faces.push_back(face);
+                        normals.push_back(-Vector3f::cross(fv[2]-fv[0], fv[1]-fv[0]));
+                        fnum--;
+                    }
+                }
+
+            }
+
+            f.close();
+        }
+        else{
+            cout << "Could not open file. Terminating program." << endl;
+            exit(0);
+
+        }
+        o.close();
 
 	}
 
 	void drawMesh(){
-		//const GLfloat yellow[4] = {.75,.75,.6,1.0};
-		//glMaterialfv(GL_FRONT, GL_DIFFUSE, yellow);
-	    //glColorMaterial(GL_FRONT, GL_AMBIENT);
+		const GLfloat yellow[4] = {.75,.75,.6,1.0};
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, yellow);
+	    glColorMaterial(GL_FRONT, GL_AMBIENT);
         glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_SMOOTH);
 
@@ -134,11 +191,11 @@ namespace
 			Vector3f norm = normals[i];
 			for(unsigned int j=0; j<3; j++){
 				Vector3f vertex = vertices[face[j]];
-                if (i%4 == 0) {
+                /*if (i%4 == 0) {
                     glColor3f(1.0f,0.5f,0.5f);
                 } else {
                     glColor3f(0.5f,0.5f,1.0f);
-                }
+                }*/
 				glNormal3d(norm.x(), norm.y(), norm.z());
 				glVertex3d(vertex.x(), vertex.y(), vertex.z());
 			}
@@ -147,14 +204,14 @@ namespace
 	}
 
 	void drawPlanes(){
-		//const GLfloat green[4] = {.70,.85,.6,0.5};
-		//glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, green);
-		//glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT);
-        //glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+		const GLfloat green[4] = {.70,.85,.6,0.5};
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, green);
+		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT);
+        glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 		glEnable(GL_SMOOTH);
 		glBegin(GL_TRIANGLES);
 
-		glColor4f(.25,.75,.25,0.75);
+		//glColor4f(.25,.75,.25,0.5);
 		for(unsigned int i=0; i < planes.size(); i++){
 			vector<Vector3f> plane = planes[i];
 			Vector3f norm = -Vector3f::cross(plane[2]-plane[0], plane[1]-plane[0]);
