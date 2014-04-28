@@ -4,3 +4,11 @@ meshes/tmp/
 modeler
 obj/
 src/.DS_Store
+
+debug/modeler
+
+debug/modeler
+
+*.o
+
+modeler
