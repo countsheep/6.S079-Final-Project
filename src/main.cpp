@@ -178,24 +178,24 @@ namespace
 	}
 
 	void drawMesh(){
-		const GLfloat yellow[4] = {.75,.75,.6,1.0};
-		glMaterialfv(GL_FRONT, GL_DIFFUSE, yellow);
-	    glColorMaterial(GL_FRONT, GL_AMBIENT);
+		//const GLfloat yellow[4] = {.75,.75,.6,1.0};
+		//glMaterialfv(GL_FRONT, GL_DIFFUSE, yellow);
+	    //glColorMaterial(GL_FRONT, GL_AMBIENT);
         glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_SMOOTH);
 
-        //glColor3f(0.5f,0.5f,1.0f); 
+        glColor3f(0.5f,0.5f,1.0f); 
 		glBegin(GL_TRIANGLES);
 		for(unsigned int i=0; i<faces.size(); i++){
 			vector<int> face = faces[i];
 			Vector3f norm = normals[i];
 			for(unsigned int j=0; j<3; j++){
 				Vector3f vertex = vertices[face[j]];
-                /*if (i%4 == 0) {
+                if (i%4 == 0) {
                     glColor3f(1.0f,0.5f,0.5f);
                 } else {
                     glColor3f(0.5f,0.5f,1.0f);
-                }*/
+                }
 				glNormal3d(norm.x(), norm.y(), norm.z());
 				glVertex3d(vertex.x(), vertex.y(), vertex.z());
 			}
@@ -204,14 +204,14 @@ namespace
 	}
 
 	void drawPlanes(){
-		const GLfloat green[4] = {.70,.85,.6,0.5};
-		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, green);
-		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT);
-        glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+		//const GLfloat green[4] = {.70,.85,.6,0.5};
+		//glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, green);
+		//glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT);
+        //glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 		glEnable(GL_SMOOTH);
 		glBegin(GL_TRIANGLES);
 
-		//glColor4f(.25,.75,.25,0.5);
+		glColor4f(.25,.75,.25,0.5);
 		for(unsigned int i=0; i < planes.size(); i++){
 			vector<Vector3f> plane = planes[i];
 			Vector3f norm = -Vector3f::cross(plane[2]-plane[0], plane[1]-plane[0]);
